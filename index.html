@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>СОР · Информатика и ИИ · 7 класс</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--tx:#1b2333;--mu:#667085;--ac:#2f6fed;--bd:#dfe3ec;--bad:#d92d20;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10141f;--card:#1a2030;--tx:#e8ecf5;--mu:#98a2b3;--bd:#2c3448}}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,Segoe UI,Arial,sans-serif;user-select:none}
+.w{max-width:760px;margin:0 auto;padding:16px}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px;margin:14px 0}
+h1{font-size:22px;margin:0 0 6px}h3{margin:0 0 8px;font-size:15px;color:var(--mu)}
+input[type=text]{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:10px;font:inherit;background:var(--bg);color:var(--tx);user-select:text}
+button{font:inherit;padding:10px 18px;border:0;border-radius:10px;background:var(--ac);color:#fff;cursor:pointer}
+button.g{background:var(--bd);color:var(--tx)}
+label.o{display:block;padding:9px 12px;border:1px solid var(--bd);border-radius:10px;margin:6px 0;cursor:pointer}
+label.o:has(input:checked){border-color:var(--ac);background:rgba(47,111,237,.1)}
+#bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--card);border-bottom:1px solid var(--bd);padding:10px 16px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+#tm{font:700 22px ui-monospace,monospace}#tm.lo{color:var(--bad)}
+.px{display:grid;gap:2px;width:fit-content;margin:8px 0}.px i{width:26px;height:26px;background:#fff;border:1px solid #bbb}.px i.b{background:#111}
+#ov{position:fixed;inset:0;background:rgba(10,14,25,.93);color:#fff;display:none;z-index:99;align-items:center;justify-content:center;text-align:center;padding:24px}
+#calc{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:8}
+#cp{display:none;width:230px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px;margin-bottom:8px}
+#cp input{text-align:right;font-size:18px}#cg{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:6px}#cg button{padding:9px 0}
+table{border-collapse:collapse;width:100%;font-size:14px}td,th{border-bottom:1px solid var(--bd);padding:6px;text-align:left}
+.sm{font-size:13px;color:var(--mu)}.ok{color:#079455}.no{color:var(--bad)}
+</style></head><body>
+<div id="app"></div>
+<div id="ov"><div><h1 id="ot">Вы покинули окно теста!</h1><p id="op"></p><button onclick="back()">Вернуться к работе</button></div></div>
+<div id="calc" style="display:none"><div id="cp"><input type="text" id="ci" placeholder="0" inputmode="none" readonly><div id="cg"></div></div><button class="g" onclick="tc()">🧮 Калькулятор</button></div>
+
+<script>
+/* ===== БАНК ЗАДАНИЙ: 8 заданий × 4 варианта. Для каждого ученика выбирается 1 случайный вариант ===== */
+const BANK=[
+{t:'Личная безопасность · 7.4.1.1',p:1,k:'c',v:[
+{q:'Какой пароль самый надёжный?',o:['12345678','qwerty','Moy_Pa$$w0rd-2026!','ivan2012'],a:2},
+{q:'Какой пароль самый надёжный?',o:['password','Dastan2010','11111111','T7#kL9!vQ2@x'],a:3},
+{q:'Какой пароль самый надёжный?',o:['abcdef','Aigerim','Zh4$n_7Rb!pL','20102010'],a:2},
+{q:'Какой пароль самый надёжный?',o:['asdfgh','Xc9!mQ#2wLp$','12341234','nursultan'],a:1}]},
+{t:'Личная безопасность · 7.4.1.1',p:1,k:'c',v:[
+{q:'Что такое двухфакторная аутентификация?',o:['Вход с двумя разными паролями одинаковой длины','Подтверждение входа вторым способом (код из SMS или приложения)','Установка двух антивирусов','Вход с двух устройств одновременно'],a:1},
+{q:'Для чего нужен антивирус?',o:['Для ускорения интернета','Для защиты компьютера от вредоносных программ','Для создания паролей','Для сжатия файлов'],a:1},
+{q:'Что такое архивация данных?',o:['Удаление ненужных файлов','Создание сжатой резервной копии данных','Проверка файлов на вирусы','Смена пароля'],a:1},
+{q:'Зачем нужна резервная копия (архив) важных файлов?',o:['Чтобы файлы занимали больше места','Чтобы восстановить данные при потере или поломке','Чтобы ускорить загрузку страниц','Чтобы скрыть файлы от антивируса'],a:1}]},
+{t:'Единицы измерения информации · 7.2.1.1',p:2,k:'n',v:[
+{q:'Переведите 2 Кбайт в биты. Ответ запишите числом.',a:'16384'},
+{q:'Переведите 5120 байт в Кбайт. Ответ запишите числом.',a:'5'},
+{q:'Переведите 3 Мбайт в Кбайт. Ответ запишите числом.',a:'3072'},
+{q:'Переведите 16384 бит в Кбайт. Ответ запишите числом.',a:'2'}]},
+{t:'Перевод единиц информации · 7.2.1.1',p:2,k:'n',v:[
+{q:'Сколько бит в 0,5 Кбайт? Ответ запишите числом.',a:'4096'},
+{q:'Сколько Мбайт в 2 Гбайт? Ответ запишите числом.',a:'2048'},
+{q:'Выразите 12288 бит в Кбайт. Ответ запишите числом.',a:'1.5'},
+{q:'Сколько Кбайт в ¼ Мбайт? Ответ запишите числом.',a:'256'}]},
+{t:'Измерение информации · 7.2.1.2',p:2,k:'n',v:[
+{q:'Мощность алфавита равна 64 символа. Сколько бит занимает один символ (N = 2^i)? Ответ запишите числом.',a:'6'},
+{q:'Мощность алфавита равна 256 символов. Сколько бит занимает один символ (N = 2^i)? Ответ запишите числом.',a:'8'},
+{q:'Мощность алфавита равна 32 символа. Сколько бит занимает один символ (N = 2^i)? Ответ запишите числом.',a:'5'},
+{q:'Мощность алфавита равна 16 символов. Сколько бит занимает один символ (N = 2^i)? Ответ запишите числом.',a:'4'}]},
+{t:'Измерение информации · 7.2.1.2',p:2,k:'n',v:[
+{q:'Сообщение состоит из 200 символов, алфавит содержит 32 символа. Найдите информационный объём сообщения в битах (I = K · i).',a:'1000'},
+{q:'Сообщение состоит из 128 символов, алфавит содержит 16 символов. Найдите информационный объём сообщения в битах (I = K · i).',a:'512'},
+{q:'Сообщение состоит из 100 символов, алфавит содержит 256 символов. Найдите информационный объём сообщения в битах (I = K · i).',a:'800'},
+{q:'Сообщение состоит из 60 символов, алфавит содержит 64 символа. Найдите информационный объём сообщения в битах (I = K · i).',a:'360'}]},
+{t:'Кодирование текста · 7.2.1.3',p:2,k:'t',v:[
+{q:'Таблица кодов: А=000, Б=001, В=010, Г=011. Декодируйте сообщение 011000001010 (запишите слово заглавными буквами).',a:'ГАБВ'},
+{q:'Таблица кодов: К=00, О=01, Т=10, Ш=11. Декодируйте сообщение 000110 (запишите слово заглавными буквами).',a:'КОТ'},
+{q:'Таблица кодов: А=00, М=01, Р=10, С=11. Декодируйте сообщение 11000100 (запишите слово заглавными буквами).',a:'САМА'},
+{q:'Таблица кодов: Д=000, О=001, М=010, Н=011, Е=100. Декодируйте сообщение 000001010 (запишите слово заглавными буквами).',a:'ДОМ'}]},
+{t:'Кодирование монохромного изображения · 7.2.1.3',p:2,k:'t',v:[
+{g:['01110','10001','11111','10001','10001'],r:3,q:'Чёрный пиксель кодируется 1, белый — 0. Запишите двоичный код 3-й строки изображения.',a:'11111'},
+{g:['11100','10010','11100','10010','11100'],r:2,q:'Чёрный пиксель кодируется 1, белый — 0. Запишите двоичный код 2-й строки изображения.',a:'10010'},
+{g:['00100','01110','11111','00100','00100'],r:1,q:'Чёрный пиксель кодируется 1, белый — 0. Запишите двоичный код 1-й строки изображения.',a:'00100'},
+{g:['10001','01010','00100','01010','10001'],r:4,q:'Чёрный пиксель кодируется 1, белый — 0. Запишите двоичный код 4-й строки изображения.',a:'01010'}]},
+{t:'Личная безопасность · 7.4.1.1',p:1,k:'c',v:[
+{q:'Что нужно сделать, если пароль от учётной записи могли узнать посторонние?',o:['Ничего, пароль и так надёжный','Сменить пароль и включить двухфакторную аутентификацию','Сообщить пароль друзьям для проверки','Удалить антивирус'],a:1},
+{q:'Какое правило относится к безопасному использованию паролей?',o:['Использовать один пароль для всех сайтов','Хранить пароль на стикере у монитора','Использовать разные пароли для разных сервисов','Записывать пароль в открытом чате'],a:2},
+{q:'Что поможет сохранить данные, если компьютер заразился вирусом?',o:['Регулярные архивные копии на внешнем носителе','Отключение антивируса','Открытие вложений от незнакомых людей','Хранение файлов только на рабочем столе'],a:0},
+{q:'Что делает антивирусная программа?',o:['Обнаруживает и удаляет вредоносные программы','Создаёт надёжные пароли','Увеличивает объём памяти','Переводит единицы информации'],a:0}]},
+{t:'Измерение информации · 7.2.1.2',p:2,k:'n',v:[
+{q:'Текст содержит 2048 символов, каждый символ кодируется 8 битами. Найдите информационный объём текста в Кбайт.',a:'2'},
+{q:'Текст содержит 4096 символов, каждый символ кодируется 8 битами. Найдите информационный объём текста в Кбайт.',a:'4'},
+{q:'Текст содержит 1024 символа, мощность алфавита — 256. Найдите информационный объём текста в Кбайт.',a:'1'},
+{q:'Текст содержит 3072 символа, мощность алфавита — 256. Найдите информационный объём текста в Кбайт.',a:'3'}]},
+{t:'Измерение информации · 7.2.1.2',p:2,k:'n',v:[
+{q:'Пароль состоит из 3 символов, алфавит — 10 цифр. Сколько различных паролей можно составить (N^K)?',a:'1000'},
+{q:'Код состоит из 4 символов, алфавит — 2 символа (0 и 1). Сколько различных кодов можно составить (N^K)?',a:'16'},
+{q:'Слово состоит из 3 символов, алфавит — 4 символа. Сколько различных слов можно составить (N^K)?',a:'64'},
+{q:'Код состоит из 3 символов, алфавит — 5 символов. Сколько различных кодов можно составить (N^K)?',a:'125'}]},
+{t:'Кодирование текста · 7.2.1.3',p:2,k:'t',v:[
+{q:'Таблица кодов: А=00, Б=01, В=10, Г=11. Закодируйте слово ВАГ (запишите двоичный код).',a:'100011'},
+{q:'Таблица кодов: А=00, Б=01, В=10, Г=11. Закодируйте слово БВА (запишите двоичный код).',a:'011000'},
+{q:'Таблица кодов: А=00, Б=01, В=10, Г=11. Закодируйте слово ГБВ (запишите двоичный код).',a:'110110'},
+{q:'Таблица кодов: А=00, Б=01, В=10, Г=11. Закодируйте слово АГБ (запишите двоичный код).',a:'001101'}]},
+{t:'Кодирование монохромного изображения · 7.2.1.3',p:2,k:'n',v:[
+{g:['1010','0101','1010','0101'],q:'Чёрный пиксель — 1, белый — 0. Сколько чёрных пикселей (единиц) на изображении?',a:'8'},
+{g:['1111','1001','1001','1111'],q:'Чёрный пиксель — 1, белый — 0. Сколько чёрных пикселей (единиц) на изображении?',a:'12'},
+{g:['0111','0010','0010','0010'],q:'Чёрный пиксель — 1, белый — 0. Сколько чёрных пикселей (единиц) на изображении?',a:'6'},
+{g:['1000','1100','1110','1111'],q:'Чёрный пиксель — 1, белый — 0. Сколько чёрных пикселей (единиц) на изображении?',a:'10'}]},
+{t:'Кодирование монохромного изображения · 7.2.1.3',p:2,k:'n',v:[
+{q:'Монохромное изображение имеет размер 8×8 пикселей, один пиксель кодируется 1 битом. Найдите объём изображения в байтах.',a:'8'},
+{q:'Монохромное изображение имеет размер 16×16 пикселей, один пиксель кодируется 1 битом. Найдите объём изображения в байтах.',a:'32'},
+{q:'Монохромное изображение имеет размер 16×8 пикселей, один пиксель кодируется 1 битом. Найдите объём изображения в байтах.',a:'16'},
+{q:'Монохромное изображение имеет размер 32×32 пикселя, один пиксель кодируется 1 битом. Найдите объём изображения в байтах.',a:'128'}]}
+];
+window.alert=m=>{let t=document.getElementById('toast');if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;left:50%;top:70px;transform:translateX(-50%);background:#d92d20;color:#fff;padding:10px 16px;border-radius:10px;z-index:100';document.body.appendChild(t)}t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',3500)};
+function two(b,f){if(b.dataset.s){f();return}b.dataset.s=1;const o=b.textContent;b.textContent='Нажмите ещё раз';setTimeout(()=>{b.dataset.s='';b.textContent=o},4000)}
+const DUR=40*60*1000,MAXV=3,PIN='1234',KS='sor7_cur',KR='sor7_results';
+const $=s=>document.querySelector(s),app=$('#app');
+let LAST=null,S=null,tick=null,vlock=false;
+const ld=k=>{try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}};
+const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const sh=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function home(){
+ clearInterval(tick);$('#calc').style.display='none';
+ const old=ld(KS),res=old&&!old.done;
+ app.innerHTML=`<div class="w"><div class="c"><h1>СОР · Информатика и ИИ · 7 класс</h1>
+ <p class="sm">Время: 40 минут · ${BANK.length} заданий · Максимум: ${BANK.reduce((s,b)=>s+b.p,0)} баллов. Ответы сохраняются автоматически.</p>
+ ${res?`<p><b>Найдена незавершённая работа: ${esc(old.name)}.</b></p><button onclick="resume()">Продолжить работу</button> <button class="g" onclick="two(this,()=>{localStorage.removeItem('${KS}');home()})">Начать заново</button><hr>`:''}
+ <h3>Ученик</h3><input type="text" id="nm" placeholder="Фамилия и имя"><br><br><input type="text" id="cl" placeholder="Класс (например, 7А)">
+ <p class="sm">Правила: работа открывается на весь экран. Переключение вкладок, сворачивание окна или выход из полноэкранного режима фиксируется. После ${MAXV} нарушений работа завершается автоматически. Копирование и правый клик отключены.</p>
+ <button onclick="start()">Начать СОР</button></div></div>`;
+}
+function start(){
+ const n=$('#nm').value.trim(),c=$('#cl').value.trim();
+ if(n.length<3||!c){alert('Введите фамилию, имя и класс');return}
+ S={name:n,cls:c,start:Date.now(),end:Date.now()+DUR,viol:0,done:false,ans:{},
+  items:BANK.map((b,i)=>{const vi=Math.random()*b.v.length|0;const v=b.v[vi];return{i,vi,o:v.o?sh(v.o.map((x,j)=>j)):null}})};
+ sv(KS,S);run();
+}
+function resume(){S=ld(KS);S.viol=S.viol;run()}
+function fs(){const e=document.documentElement;try{(e.requestFullscreen||e.webkitRequestFullscreen).call(e).catch(()=>{})}catch(x){}}
+function run(){
+ fs();$('#calc').style.display='block';
+ let h=`<div id="bar"><div><b>${esc(S.name)}</b> · ${esc(S.cls)}<div class="sm">Нарушений: <span id="vc">${S.viol}</span> из ${MAXV}</div></div><div id="tm">40:00</div><button onclick="fin1(this)">Завершить работу</button></div><div class="w">`;
+ S.items.forEach((it,n)=>{
+  const b=BANK[it.i],v=b.v[it.vi],a=S.ans[n]||'';
+  h+=`<div class="c"><h3>Задание ${n+1} · ${b.t} · ${b.p} б.</h3><p style="margin:0 0 8px"><b>${esc(v.q)}</b></p>`;
+  if(v.g)h+=`<div class="px" style="grid-template-columns:repeat(${v.g[0].length},26px)">${v.g.map(r=>[...r].map(x=>`<i class="${x=='1'?'b':''}"></i>`).join('')).join('')}</div>`;
+  if(b.k=='c')h+=it.o.map(j=>`<label class="o"><input type="radio" name="q${n}" value="${j}" ${a===String(j)?'checked':''} onchange="sa(${n},this.value)"> ${esc(v.o[j])}</label>`).join('');
+  else h+=`<input type="text" value="${esc(a)}" placeholder="Ваш ответ" oninput="sa(${n},this.value)" autocomplete="off">`;
+  h+='</div>';
+ });
+ app.innerHTML=h+'</div>';
+ clearInterval(tick);tick=setInterval(tk,500);tk();
+ if(!document.fullscreenElement&&!document.webkitFullscreenElement)setTimeout(()=>{if(S&&!S.done&&!document.fullscreenElement)warn('Не удалось включить полноэкранный режим. Нажмите кнопку ниже.',false)},800);
+}
+function sa(n,v){S.ans[n]=v;sv(KS,S)}
+function tk(){
+ const l=S.end-Date.now();if(l<=0){fin();return}
+ const m=Math.floor(l/60000),s=Math.floor(l%60000/1000),t=$('#tm');
+ t.textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');t.className=l<5*60000?'lo':'';
+}
+function fin1(b){if(b.dataset.s){fin();return}b.dataset.s=1;b.textContent='Точно завершить? Нажмите ещё раз';setTimeout(()=>{b.dataset.s='';b.textContent='Завершить работу'},4000)}
+function norm(s){return String(s||'').trim().toUpperCase().replace(/\s+/g,'').replace(',','.')}
+function check(n){
+ const it=S.items[n],b=BANK[it.i],v=b.v[it.vi],a=S.ans[n];
+ if(a===undefined||a==='')return 0;
+ if(b.k=='c')return Number(a)===v.a?b.p:0;
+ if(b.k=='n')return parseFloat(norm(a))===parseFloat(v.a)?b.p:0;
+ return norm(a)===norm(v.a)?b.p:0;
+}
+function fin(){
+ if(!S||S.done)return;S.done=true;clearInterval(tk);clearInterval(tick);
+ const pts=S.items.map((_,n)=>check(n)),sum=pts.reduce((a,b)=>a+b,0),mx=BANK.reduce((s,b)=>s+b.p,0),pc=Math.round(sum/mx*100);
+ const gr=pc>=85?5:pc>=65?4:pc>=40?3:2;
+ const r={name:S.name,cls:S.cls,date:new Date().toLocaleString('ru-RU'),sum,mx,pc,gr,viol:S.viol,pts,
+  vars:S.items.map(i=>i.vi+1),ans:S.items.map((_,n)=>S.ans[n]||'')};
+ LAST=r;const all=ld(KR)||[];all.push(r);sv(KR,all);sv(KS,S);
+ try{document.exitFullscreen&&document.exitFullscreen()}catch(e){}
+ $('#ov').style.display='none';$('#calc').style.display='none';
+ app.innerHTML=`<div class="w"><div class="c"><h1>Работа завершена и сохранена</h1><p>${esc(S.name)}, ${esc(S.cls)}</p>
+ <p style="font-size:20px">Баллы: <b>${sum} из ${mx}</b> (${pc}%) · Оценка: <b>${gr}</b></p>
+ <p class="sm">Нарушений режима: ${S.viol}. Результат сохраняется в файл на этом компьютере.</p>
+ <table><tr><th>№</th><th>Тема</th><th>Балл</th></tr>${pts.map((p,i)=>`<tr><td>${i+1}</td><td>${BANK[i].t}</td><td class="${p?'ok':'no'}">${p}/${BANK[i].p}</td></tr>`).join('')}</table>
+ <br><button onclick="saveFile()">Сохранить результат в файл</button> <button class="g" onclick="localStorage.removeItem('${KS}');home()">На главную</button><p class="sm" id="sv">Сохранение файла…</p></div></div>`;setTimeout(saveFile,700);
+}
+/* ===== Защита от выхода ===== */
+function viol(why){
+ if(!S||S.done||vlock)return;vlock=true;S.viol++;sv(KS,S);
+ const e=$('#vc');if(e)e.textContent=S.viol;
+ if(S.viol>=MAXV){warn('Превышен лимит нарушений. Работа завершена.',true);setTimeout(fin,1500);return}
+ warn(why+' Нарушение '+S.viol+' из '+MAXV+'. Следующее нарушение может завершить работу.',false);
+}
+function warn(t,end){$('#op').textContent=t;$('#ov').style.display='flex';$('#ov button').style.display=end?'none':''}
+function back(){$('#ov').style.display='none';vlock=false;fs()}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)viol('Вы переключили вкладку или свернули окно.')});
+window.addEventListener('blur',()=>{if(S&&!S.done&&!document.hidden)setTimeout(()=>{if(!document.hasFocus())viol('Окно теста потеряло фокус (другое окно или приложение).')},300)});
+document.addEventListener('fullscreenchange',()=>{if(S&&!S.done&&!document.fullscreenElement&&$('#calc').style.display!=='none')viol('Вы вышли из полноэкранного режима.')});
+window.addEventListener('beforeunload',e=>{if(S&&!S.done){e.preventDefault();e.returnValue=''}});
+['contextmenu','copy','cut','paste','dragstart'].forEach(ev=>document.addEventListener(ev,e=>{if(S&&!S.done)e.preventDefault()}));
+document.addEventListener('keydown',e=>{if(!S||S.done)return;const k=e.key.toLowerCase();
+ if(e.key=='F12'||e.key=='F5'||e.key=='F11'||(e.ctrlKey||e.metaKey)&&['c','v','x','u','s','p','a','t','n','w','r','f'].includes(k)||(e.ctrlKey&&e.shiftKey&&['i','j','c'].includes(k))||e.altKey&&e.key=='Tab')e.preventDefault()});
+/* ===== Калькулятор ===== */
+const CK=['7','8','9','/','4','5','6','*','1','2','3','-','0','.','^','+','(',')','C','='];
+$('#cg').innerHTML=CK.map(k=>`<button class="${/\d|\./.test(k)?'g':''}" onclick="cc('${k}')">${k}</button>`).join('');
+function tc(){const p=$('#cp');p.style.display=p.style.display=='block'?'none':'block'}
+function cc(k){const i=$('#ci');
+ if(k=='C')i.value='';
+ else if(k=='='){try{const x=i.value.replace(/\^/g,'**');if(!/^[\d+\-*\/().\s*]+$/.test(x))throw 0;const r=Function('"use strict";return ('+x+')')();i.value=Number.isFinite(r)?+r.toFixed(10):'Ошибка'}catch(e){i.value='Ошибка'}}
+ else{if(i.value=='Ошибка')i.value='';i.value+=k}}
+/* ===== Сохранение результата в файл ===== */
+function saveFile(){
+ const r=LAST,m=$('#sv');if(!r)return;const n=BANK.length;
+ const h=['Ученик','Класс','Дата','Баллы','Максимум','Процент','Оценка','Нарушений','Варианты'];
+ for(let i=1;i<=n;i++)h.push('З'+i+' балл');for(let i=1;i<=n;i++)h.push('З'+i+' ответ');
+ const q=x=>'"'+String(x).replace(/"/g,'""')+'"';
+ const row=[r.name,r.cls,r.date,r.sum,r.mx,r.pc,r.gr,r.viol,r.vars.join('-')].concat(r.pts,r.ans);
+ const csv='\uFEFF'+[h,row].map(x=>x.map(q).join(';')).join('\r\n');
+ const fn=('SOR_'+r.cls+'_'+r.name).replace(/[^\wа-яёА-ЯЁ-]+/g,'_')+'.csv';
+ const fb=()=>{if(m)m.innerHTML='Файл не сохранён автоматически. Нажмите кнопку «Сохранить результат в файл» или скопируйте текст ниже и покажите учителю:<br><input type="text" readonly value="'+esc(row.join(' | '))+'">'};
+ const dl=()=>{try{const b=new Blob([csv],{type:'text/csv;charset=utf-8'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),3000);if(m)m.textContent='Результат сохранён в файл: '+fn+' (папка «Загрузки»)'}catch(e){fb()}};
+ const c=window.claude&&claude.use?claude.use('downloads'):Promise.resolve(null);
+ c.then(x=>{if(!x){dl();return}return x.save({filename:fn,data:csv}).then(()=>{if(m)m.textContent='Результат сохранён в файл: '+fn}).catch(e=>{if(e&&e.code=='declined')fb();else dl()})}).catch(dl);
+}
+home();
+</script></body></html>
